@@ -17,7 +17,7 @@ const leerDatos = ()=>{
 
 const escribirDatos = (datos)=>{
     try{
-    fs.writeFileSync('./public/productos.json',JSON.stringify(datos))//convierte un objeto en js a json
+    fs.writeFileSync('./public/productos.json',JSON.stringify(datos))
 
     }catch(error){
         console.log(error)
@@ -50,20 +50,20 @@ app.post('/Productos', (req,res)=>{
 })
 })
 
-app.put('/Productos/:id', (req,res)=>{
-    const id = req.params.id
-    const nuevosDatos = req.body
-    let datos=leerDatos()
-    const prodEncontrado = datos.find((p)=>p.id==req.params.id)
+app.put('/Productos/:id', (req, res) => {
+    const id = req.params.id;
+    const nuevosDatos = req.body;
+    let datos = leerDatos();
+    const prodEncontrado = datos.find((p) => p.id == id);
 
-        if(!prodEncontrado){
-          return res.status(404),res.json('No se encuentra el producto')
-        }
+    if (!prodEncontrado) {
+        return res.status(404).json('No se encuentra el producto');
+    }
 
-        datos = datos.map(datos=>datos.id==req.params.id?{...datos,...nuevosDatos}:datos)
-        escribirDatos(datos)
-        res.json({mensaje: 'Productos actualizados', Productos: nuevosDatos})
-})
+    datos = datos.map(datos => datos.id == id ? { ...datos, ...nuevosDatos } : datos);
+    escribirDatos(datos);
+    res.json({ mensaje: 'Productos actualizados', Productos: nuevosDatos });
+});
 
 app.delete('/Productos/:id', (req,res)=>{
     const id = req.params.id
